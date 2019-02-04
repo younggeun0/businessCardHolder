@@ -1,10 +1,10 @@
-package businessCardHolder.dao;
+package client.dao;
 
-public class BCHDao {
+public class ClientDAO {
 	
-	private BCHDao bch_dao;
+	private ClientDAO bch_dao;
 
-	private BCHDao() {
+	private ClientDAO() {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
 		} catch (ClassNotFoundException e) {
@@ -12,10 +12,10 @@ public class BCHDao {
 		}
 	}
 	
-	public BCHDao getInstance() {
+	public ClientDAO getInstance() {
 		
 		if (bch_dao == null) {
-			bch_dao = new BCHDao();
+			bch_dao = new ClientDAO();
 		}
 		
 		return bch_dao;
