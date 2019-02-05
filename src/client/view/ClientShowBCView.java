@@ -14,11 +14,17 @@ public class ClientShowBCView extends JDialog {
 	private DefaultTableModel dtmBC;
 	private JScrollPane jspBC;
 	
-	public ClientShowBCView() {
+	public ClientShowBCView(ClientMainView cmv) {
+		super(cmv, "명함보기", true);
 		
 		String[] columnNames = {"등록일", "명함메모"};
 		dtmBC = new DefaultTableModel(columnNames, 3);
-		jtBC = new JTable(dtmBC);
+		jtBC = new JTable(dtmBC) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		jspBC = new JScrollPane(jtBC);
 		
 		add(jspBC);
@@ -30,8 +36,13 @@ public class ClientShowBCView extends JDialog {
 		setBounds(400, 300, 500, 400);
 		setVisible(true);
 	}
-	
-	public static void main(String[] args) {
-		new ClientShowBCView();
+	public JTable getJtBC() {
+		return jtBC;
+	}
+	public DefaultTableModel getDtmBC() {
+		return dtmBC;
+	}
+	public JScrollPane getJspBC() {
+		return jspBC;
 	}
 }

@@ -17,14 +17,15 @@ public class ClientMainView extends JFrame {
 		
 		setLayout(null);
 		
-		jbAddBC.setBounds(20, 20, 260, 60);
-		jbShowBC.setBounds(20, 100, 260, 60);
+		jbAddBC.setBounds(30, 30, 260, 60);
+		jbShowBC.setBounds(30, 110, 260, 60);
 		
 		add(jbAddBC);
 		add(jbShowBC);
 		
 		ClientMainController cmc = new ClientMainController(this);
-
+		jbAddBC.addActionListener(cmc);
+		jbShowBC.addActionListener(cmc);
 		addWindowListener(cmc);
 		
 		setBounds(300, 400, 320, 230);
