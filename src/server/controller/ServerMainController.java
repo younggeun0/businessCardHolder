@@ -60,6 +60,7 @@ public class ServerMainController extends WindowAdapter implements ActionListene
 				fileSize = dis.readInt();
 				
 				for(int i=0; i<fileSize; i++) {
+					
 				}
 				// 일단 클라이언트가 이미지를 등록, 등록하면 서버에서 스레드가 연결해서
 				// 파일을 읽어들여서 저장하고, DB에 등록
