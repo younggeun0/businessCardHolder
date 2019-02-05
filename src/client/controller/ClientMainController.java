@@ -27,7 +27,13 @@ public class ClientMainController extends WindowAdapter implements ActionListene
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == cmv.getJbAddBC()) { // 명함등록
+			
+		}
 		
+		if (e.getSource() == cmv.getJbShowBC()) { // 등록한 명함보기
+			
+		}
 		
 	}
 }
