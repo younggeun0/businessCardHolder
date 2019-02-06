@@ -2,8 +2,8 @@ package server.vo;
 
 public class DetailBCVO {
 	
-	String fileName;
-	String memo;
+	private String fileName;
+	private String memo;
 	
 	public DetailBCVO(String fileName, String memo) {
 		this.fileName = fileName;

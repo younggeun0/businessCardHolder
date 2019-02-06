@@ -2,8 +2,8 @@ package client.vo;
 
 public class DetailVO {
 	
-	String fileName;
-	String memo;
+	private String fileName;
+	private String memo;
 	
 	public DetailVO(String fileName, String memo) {
 		this.fileName = fileName;
@@ -19,4 +19,4 @@ public class DetailVO {
 	public String toString() {
 		return "DetailVO [fileName=" + fileName + ", memo=" + memo + "]";
 	}
-}
+} 

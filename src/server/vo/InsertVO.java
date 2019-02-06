@@ -2,8 +2,8 @@ package server.vo;
 
 public class InsertVO {
 	
-	String memo;
-	String fileName;
+	private String memo;
+	private String fileName;
 	
 	public InsertVO(String memo, String fileName) {
 		this.memo = memo;

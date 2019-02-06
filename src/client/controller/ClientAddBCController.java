@@ -67,7 +67,6 @@ public class ClientAddBCController extends WindowAdapter implements ActionListen
 					dos.flush();
 
 					dos.writeUTF(memo);
-					System.out.println("file¿Ã∏ß? : "+file.getName());
 					dos.writeUTF(file.getName());
 					
 					fis = new FileInputStream(path);
