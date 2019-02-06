@@ -7,11 +7,9 @@ import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -21,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import client.view.ClientDetailBCView;
 import client.view.ClientShowBCView;
 import client.vo.DetailVO;
-import client.vo.SelectedRowVO;
 import server.vo.TableDataVO;
 
 public class ClientShowBCController extends WindowAdapter implements MouseListener {
@@ -56,12 +53,13 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 				DefaultTableModel dtm = csbcv.getDtmBC();
 				dtm.setRowCount(0);
 
-				String[] rowData = new String[2];
+				String[] rowData = new String[3];
 				TableDataVO tdvo = null;
 				for (int i = 0; i < list.size(); i++) {
 					tdvo = list.get(i);
-					rowData[0] = tdvo.getInputDate();
-					rowData[1] = tdvo.getMemo();
+					rowData[0] = tdvo.getBcNum();
+					rowData[1] = tdvo.getInputDate();
+					rowData[2] = tdvo.getMemo();
 
 					dtm.addRow(rowData);
 				}
@@ -95,12 +93,10 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 				// detailVO에 담아서 서버에 전송, 서버가 판별한 후 결과를 VO로 전송, 보여줌
 				int selectedRow = csbcv.getJtBC().getSelectedRow();
 
-				SelectedRowVO srvo = new SelectedRowVO((String) csbcv.getJtBC().getValueAt(selectedRow, 0),
-						(String) csbcv.getJtBC().getValueAt(selectedRow, 1));
-
+				String bcNum = (String)csbcv.getJtBC().getValueAt(selectedRow, 0);
+				
 				Socket client = null;
 				DataOutputStream dos = null;
-				ObjectOutputStream oos = null;
 				DataInputStream dis = null;
 				FileOutputStream fos = null;
 				boolean imgExistFlag = false;
@@ -110,12 +106,11 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 						client = new Socket("localhost", 8000);
 						dos = new DataOutputStream(client.getOutputStream());
 						
-						dos.writeUTF("showDetail");
+						dos.writeUTF("showDetail"); // 요청타입 분기
 						dos.flush();
 						
-						oos = new ObjectOutputStream(client.getOutputStream());
-						oos.writeObject(srvo);
-						oos.flush();
+						dos.writeUTF(bcNum); // 해당 선택된 레코드 bcNum을 전달
+						dos.flush();
 						
 						dis = new DataInputStream(client.getInputStream());
 						
@@ -155,7 +150,7 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 							System.out.println("파일없어서받음");
 						}
 						
-						DetailVO dvo = new DetailVO(fileName, (String) csbcv.getJtBC().getValueAt(selectedRow, 1));
+						DetailVO dvo = new DetailVO(fileName, (String) csbcv.getJtBC().getValueAt(selectedRow, 2));
 						
 						new ClientDetailBCView(csbcv, dvo);
 						

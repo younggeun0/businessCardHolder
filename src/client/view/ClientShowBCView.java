@@ -17,9 +17,11 @@ public class ClientShowBCView extends JDialog {
 	public ClientShowBCView(ClientMainView cmv) {
 		super(cmv, "명함보기", true);
 		
-		String[] columnNames = {"등록일", "명함메모"};
+		String[] columnNames = {"명함번호","등록일", "명함메모"};
 		dtmBC = new DefaultTableModel(columnNames, 3);
 		jtBC = new JTable(dtmBC) {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;

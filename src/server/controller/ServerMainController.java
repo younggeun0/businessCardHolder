@@ -10,15 +10,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import client.vo.SelectedRowVO;
 import server.dao.ServerDAO;
 import server.view.ServerMainView;
 import server.vo.DetailBCVO;
@@ -58,7 +55,6 @@ public class ServerMainController extends WindowAdapter implements ActionListene
 		FileOutputStream fos = null;
 		FileInputStream fis = null;
 		ObjectOutputStream oos = null;
-		ObjectInputStream ois = null;
 
 		String memo = "";
 		String flag = "";
@@ -136,12 +132,11 @@ public class ServerMainController extends WindowAdapter implements ActionListene
 					}
 					
 					if (flag.equals("showDetail")) {
-						ois = new ObjectInputStream(client.getInputStream());
 						
-						SelectedRowVO srvo = (SelectedRowVO)ois.readObject();
+						String bcNum = dis.readUTF();
 						
-						DetailBCVO dbcvo = s_dao.selectDetail(srvo);
-						System.out.println("클라가보낸 객체로 조회한 디테일VO내용"+dbcvo);
+						DetailBCVO dbcvo = s_dao.selectDetail(bcNum);
+						System.out.println("클라가 보낸 bcNum으로 조회한 디테일VO내용"+dbcvo);
 						
 						fis = new FileInputStream(new File("D:/git/repositories/businessCardHolder/src/server/img/"+dbcvo.getFileName()));
 						
@@ -175,16 +170,13 @@ public class ServerMainController extends WindowAdapter implements ActionListene
 						
 						// DB에서 시간과 메모가 동일한 데이터를 찾아서 파일명까지 클라이언트에 전달
 						// 이미지 파일이 클라이언트 측에 존재하는지 우선 파악해야 함
-						// 파악하고 전달..아오
+						// 파악하고 전달..아악
 					}
 
 				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} finally {
-				if (ois != null) { ois.close(); }
 				if (oos != null) { oos.close(); }
 				if (dis != null) { dis.close(); }
 				if (dos != null) { dos.close(); }

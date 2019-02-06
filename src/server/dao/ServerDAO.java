@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import client.vo.SelectedRowVO;
 import server.vo.DetailBCVO;
 import server.vo.InsertVO;
 import server.vo.TableDataVO;
@@ -53,7 +52,7 @@ public class ServerDAO {
 		try {
 			con = getConn();
 			
-			String insertBC = "insert into business_card(memo, file_name) values(?,?)";
+			String insertBC = "insert into business_card(bc_num, memo, file_name) values(bc_code, ?,?)";
 			pstmt = con.prepareStatement(insertBC);
 			pstmt.setString(1, ivo.getMemo());
 			pstmt.setString(2, ivo.getFileName());
@@ -78,14 +77,14 @@ public class ServerDAO {
 		try {
 			
 			con = getConn();
-			String selectQuery = "SELECT input_date, memo FROM business_card";
+			String selectQuery = "SELECT bc_num, input_date, memo FROM business_card";
 			pstmt = con.prepareStatement(selectQuery);
 			
 			rs = pstmt.executeQuery();
 			
 			TableDataVO tdvo = null;
 			while(rs.next()) {
-				tdvo = new TableDataVO(rs.getString(1), rs.getString(2));
+				tdvo = new TableDataVO(rs.getString("bc_num"), rs.getString("input_date"), rs.getString("memo"));
 				list.add(tdvo);
 			}
 			
@@ -98,21 +97,19 @@ public class ServerDAO {
 		return list;
 	}
 	
-	public DetailBCVO selectDetail(SelectedRowVO srvo) throws SQLException {
+	public DetailBCVO selectDetail(String bcNum) throws SQLException {
 		DetailBCVO dbcvo = null;
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		System.out.println(srvo);
 		try {
 			
 			con = getConn();
-			String selectDetail = "SELECT file_name, memo FROM business_card WHERE memo=? AND input_date=?";
+			String selectDetail = "SELECT file_name, memo FROM business_card WHERE bc_num=?";
 			pstmt = con.prepareStatement(selectDetail);
-			pstmt.setString(1, srvo.getMemo());
-			pstmt.setDate(2, Date.valueOf(srvo.getInputDate()));
+			pstmt.setString(1, bcNum);
 			
 			rs = pstmt.executeQuery();
 			
