@@ -15,7 +15,7 @@ public class ClientAddBCView extends JDialog {
 	JButton jbChooseImg, jbAdd, jbClose;
 	
 	public ClientAddBCView(ClientMainView cmv) {
-		super(cmv,"상세명함정보",true);
+		super(cmv,"명함 등록",true);
 		
 		jlNameCardImg = new JLabel(new ImageIcon("D:/git/repositories/businessCardHolder/src/client/img/no_img.png"));
 		jtfMemo = new JTextField();
