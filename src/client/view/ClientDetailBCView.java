@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import client.controller.ClientDetailBCController;
+import client.vo.DetailVO;
 
 public class ClientDetailBCView extends JDialog {
 
@@ -14,11 +15,12 @@ public class ClientDetailBCView extends JDialog {
 	JTextField jtfMemo;
 	JButton jbClose;
 	
-	public ClientDetailBCView(ClientMainView cmv) {
-		super(cmv,"상세명함정보",true);
+	public ClientDetailBCView(ClientShowBCView csbcv, DetailVO dvo) {
+		super(csbcv,"상세명함정보",true);
 		
-		jlNameCardImg = new JLabel(new ImageIcon("D:/git/repositories/businessCardHolder/src/client/img/no_img.jpg"));
-		jtfMemo = new JTextField();
+		jlNameCardImg = new JLabel(new ImageIcon("D:/git/repositories/businessCardHolder/src/client/img/"+dvo.getFileName()));
+		jtfMemo = new JTextField(dvo.getMemo());
+		jtfMemo.setEditable(false);
 		jbClose = new JButton("닫기");
 
 		JLabel jlMemo = new JLabel("명함메모");
@@ -40,7 +42,7 @@ public class ClientDetailBCView extends JDialog {
 
 		addWindowListener(cdbcc);
 		
-		setBounds(cmv.getY()+50, cmv.getY()+50, 520, 450);
+		setBounds(csbcv.getY()+50, csbcv.getY()+50, 520, 450);
 		setVisible(true);
 	}
 	public JLabel getJlNameCardImg() {

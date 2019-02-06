@@ -6,6 +6,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +18,9 @@ import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 
+import client.view.ClientDetailBCView;
 import client.view.ClientShowBCView;
+import client.vo.DetailVO;
 import client.vo.SelectedRowVO;
 import server.vo.TableDataVO;
 
@@ -96,6 +101,9 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 				Socket client = null;
 				DataOutputStream dos = null;
 				ObjectOutputStream oos = null;
+				DataInputStream dis = null;
+				FileOutputStream fos = null;
+				boolean imgExistFlag = false;
 				try {
 					try {
 						
@@ -109,7 +117,48 @@ public class ClientShowBCController extends WindowAdapter implements MouseListen
 						oos.writeObject(srvo);
 						oos.flush();
 						
-
+						dis = new DataInputStream(client.getInputStream());
+						
+						String fileName = dis.readUTF(); // 파일명 받기
+						
+						// 이미 파일명이 존재하는지 체크
+						File dir = new File("D:/git/repositories/businessCardHolder/src/client/img/");
+						String[] imageFiles = dir.list();
+						
+						
+						for(int i=0; i<imageFiles.length; i++) {
+							if (imageFiles[i].equals(fileName)) {
+								imgExistFlag = true;
+							}
+						}
+						
+						if (imgExistFlag) {
+							dos.writeUTF("exist");
+							dos.flush();
+							System.out.println("파일존재 안받음");
+						}else {
+							dos.writeUTF("not-exist");
+							dos.flush();
+							
+							int fileSize = dis.readInt(); // 파일의 크기(배열) 받기
+							
+							fos = new FileOutputStream("D:/git/repositories/businessCardHolder/src/client/img/"+fileName);
+							
+							int fileLen = 0;
+							byte[] readData = new byte[512];
+							while(fileSize > 0) {
+								fileLen = dis.read(readData);
+								fos.write(readData, 0, fileLen);
+								fos.flush();
+								fileSize--;
+							}
+							System.out.println("파일없어서받음");
+						}
+						
+						DetailVO dvo = new DetailVO(fileName, (String) csbcv.getJtBC().getValueAt(selectedRow, 1));
+						
+						new ClientDetailBCView(csbcv, dvo);
+						
 					} finally {
 						if (client != null) {
 							client.close();

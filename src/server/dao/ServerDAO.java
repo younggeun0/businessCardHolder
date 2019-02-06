@@ -1,6 +1,7 @@
 package server.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.vo.SelectedRowVO;
+import server.vo.DetailBCVO;
 import server.vo.InsertVO;
 import server.vo.TableDataVO;
 
@@ -93,6 +96,37 @@ public class ServerDAO {
 		}
 		
 		return list;
+	}
+	
+	public DetailBCVO selectDetail(SelectedRowVO srvo) throws SQLException {
+		DetailBCVO dbcvo = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		System.out.println(srvo);
+		try {
+			
+			con = getConn();
+			String selectDetail = "SELECT file_name, memo FROM business_card WHERE memo=? AND input_date=?";
+			pstmt = con.prepareStatement(selectDetail);
+			pstmt.setString(1, srvo.getMemo());
+			pstmt.setDate(2, Date.valueOf(srvo.getInputDate()));
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				dbcvo = new DetailBCVO(rs.getString("file_name"),rs.getString("memo"));
+			}
+			
+		} finally {
+			if (rs != null) { rs.close(); }
+			if (pstmt != null) { pstmt.close(); }
+			if (con != null) { con.close(); }
+		}
+		
+		return dbcvo;
 	}
 	
 	/*public static void main(String[] args) {

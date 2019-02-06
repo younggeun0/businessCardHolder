@@ -17,4 +17,8 @@ public class SelectedRowVO implements Serializable {
 	public String getMemo() {
 		return memo;
 	}
+	@Override
+	public String toString() {
+		return "SelectedRowVO [inputDate=" + inputDate + ", memo=" + memo + "]";
+	}
 }
